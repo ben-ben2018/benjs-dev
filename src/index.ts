@@ -1,75 +1,10 @@
-type BenNode = VDomNode | TextNode
-class VDomNode {
-    tag: string
-    props: Record<string, string>
-    children: Array<BenNode>
-    parent: VDomNode | undefined
-    key: string | null
-    component: boolean | null
-    el: HTMLElement | undefined
-    constructor({ tag, props, children, parent, el }: Pick<VDomNode, "tag" | "props" | "children" | "parent" | "el">) {
-        if (!tag) {
-            throw new Error('type is required')
-        }
-
-        console.log(children)
-        // 虚拟节点
-        this.tag = tag
-        this.props = props
-        this.children = children
-        this.parent = parent || undefined
-        this.key = null
-        this.component = null
-        this.el = el || undefined
-    }
-    // 渲染
-    render() {
-        // 创建真实的dom节点
-        const el = document.createElement(this.tag)
-        // 设置属性
-        for (const key in this.props) {
-            if (Object.hasOwnProperty.call(this.props, key)) {
-                const element = this.props[key]
-                el.setAttribute(key, element)
-            }
-            if (this.children) {
-                this.children.forEach(child => {
-                    el.appendChild(child.render())
-                })
-            }
-        }
-        return el
-    }
-    pushChildren(children) {
-        if (children) {
-            children.forEach(child => {
-                if (child instanceof VDomNode) {
-                    child.parent = this
-                }
-                this.children.push(child)
-            })
-        }
-    }
-}
-
-class TextNode {
-    textValue: string
-    parent: BenNode | undefined
-    constructor({ value, parent }: { value: string, parent?: BenNode }) {
-        this.textValue = value
-        this.parent = parent
-    }
-    render() {
-        const el = document.createTextNode(this.textValue)
-        return el
-    }
-}
+import { BenNodeType, VDomNode, TextNode } from './benDom'
 function checkTextNode(node): boolean {
     return node.nodeName === '#text'
 }
-function domToVDomNode(node, parent = undefined): BenNode {
+function domToVDomNode(node, parent = undefined): BenNodeType {
     // 创建虚拟dom节点
-    let children: Array<BenNode> = []
+    let children: Array<BenNodeType> = []
     let vdomNode
     if (checkTextNode(node)) {
         vdomNode = new TextNode({ value: node.nodeValue, parent })
@@ -92,8 +27,8 @@ class benNodeTree {
         this.root = domToVDomNode(root, undefined)
     }
 }
-const r = new Proxy({}, {
-    get(target, key: string) {
+window.r = new Proxy({}, {
+    get(_, key: string) {
         return function (info: string, props, children) {
             if (key == "text") {
                 return new TextNode({ value: info })
@@ -103,3 +38,5 @@ const r = new Proxy({}, {
     }
 }
 )
+
+window.benNodeTree = benNodeTree
