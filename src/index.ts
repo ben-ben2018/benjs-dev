@@ -33,7 +33,7 @@ const renderWorker = new Proxy({} as Record<string, Function>, {
             if (key == "text") {
                 return new TextNode({ value: info })
             }
-            return new VDomNode({ tag: key, props, children, parent: undefined, el: undefined })
+            return new VDomNode({ tag: key, props, children })
         }
     }
 }

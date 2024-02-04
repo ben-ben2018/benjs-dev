@@ -3,10 +3,10 @@ class VDomNode {
     tag: string
     props: Record<string, string>
     children: Array<BenNodeType>
-    parent: VDomNode | undefined
+    parent?: VDomNode
     key: string | null
     component: boolean | null
-    el: HTMLElement | undefined
+    el?: HTMLElement
     constructor({ tag, props, children, parent, el }: Pick<VDomNode, "tag" | "props" | "children" | "parent" | "el">) {
         if (!tag) {
             throw new Error('type is required')
