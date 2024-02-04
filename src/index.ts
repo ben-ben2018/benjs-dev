@@ -27,7 +27,7 @@ class benNodeTree {
         this.root = domToVDomNode(root, undefined)
     }
 }
-window.r = new Proxy({}, {
+const renderWorker = new Proxy({} as Record<string, Function>, {
     get(_, key: string) {
         return function (info: string, props, children) {
             if (key == "text") {
@@ -38,5 +38,5 @@ window.r = new Proxy({}, {
     }
 }
 )
-
+window.r = renderWorker
 window.benNodeTree = benNodeTree
