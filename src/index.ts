@@ -1,5 +1,13 @@
+type BenNode = VDomNode | TextNode
 class VDomNode {
-    constructor({ tag, props, children, parent, el }) {
+    tag: string
+    props: Record<string, string>
+    children: Array<BenNode>
+    parent: VDomNode | undefined
+    key: string | null
+    component: boolean | null
+    el: HTMLElement | undefined
+    constructor({ tag, props, children, parent, el }: Pick<VDomNode, "tag" | "props" | "children" | "parent" | "el">) {
         if (!tag) {
             throw new Error('type is required')
         }
@@ -9,10 +17,10 @@ class VDomNode {
         this.tag = tag
         this.props = props
         this.children = children
-        this.parent = parent || null
+        this.parent = parent || undefined
         this.key = null
         this.component = null
-        this.el = el || null
+        this.el = el || undefined
     }
     // 渲染
     render() {
@@ -45,21 +53,23 @@ class VDomNode {
 }
 
 class TextNode {
-    constructor({ value, parent }) {
+    textValue: string
+    parent: BenNode | undefined
+    constructor({ value, parent }: { value: string, parent?: BenNode }) {
         this.textValue = value
-        this.parent = parent || null
+        this.parent = parent
     }
     render() {
         const el = document.createTextNode(this.textValue)
         return el
     }
 }
-function checkTextNode(node) {
+function checkTextNode(node): boolean {
     return node.nodeName === '#text'
 }
-function domToVDomNode(node, parent = null) {
+function domToVDomNode(node, parent = undefined): BenNode {
     // 创建虚拟dom节点
-    let children = []
+    let children: Array<BenNode> = []
     let vdomNode
     if (checkTextNode(node)) {
         vdomNode = new TextNode({ value: node.nodeValue, parent })
@@ -77,17 +87,18 @@ function domToVDomNode(node, parent = null) {
     return vdomNode
 }
 class benNodeTree {
+    root: any
     constructor(root) {
-        this.root = domToVDomNode(root, null)
+        this.root = domToVDomNode(root, undefined)
     }
 }
 const r = new Proxy({}, {
-    get(target, key) {
-        return function (info, props, children) {
+    get(target, key: string) {
+        return function (info: string, props, children) {
             if (key == "text") {
                 return new TextNode({ value: info })
             }
-            return new VDomNode({ tag: key, props, children })
+            return new VDomNode({ tag: key, props, children, parent: undefined, el: undefined })
         }
     }
 }
