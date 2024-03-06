@@ -13,10 +13,12 @@
     </div>
     <script src="./dist/umd/index.js"></script>
     <script>
-        let s = r.div`${{ class: "666" }}${[]}`
+        let s1 = r.div({ class: "666" }, [])
+        let s2 = r.div({ class: "666" }, [])
+        let s3 = r.div({ class: "666" }, [])
 
-        console.log(r.div`${{ class: "666" }}${[s, s, s, r.text`555`]}`.render())
-        console.log(new benNodeTree(document.getElementById('app')))
+        console.dir(r.div({ class: "666" }, [s1, s2, s3, r.text({ value: 555 })]))
+        // console.log(new benNodeTree(document.getElementById('app')))
     </script>
 </body>
 

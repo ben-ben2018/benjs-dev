@@ -7,7 +7,8 @@ class VDomNode {
     key: string | null
     component: boolean | null
     el?: HTMLElement
-    constructor({ tag, props, children, parent, el }: Pick<VDomNode, "tag" | "props" | "children" | "parent" | "el">) {
+    sonIndex: number
+    constructor({ tag, props, children, el }: Pick<VDomNode, "tag" | "props" | "children" | "parent" | "el">) {
         if (!tag) {
             throw new Error('type is required')
         }
@@ -16,11 +17,17 @@ class VDomNode {
         // 虚拟节点
         this.tag = tag
         this.props = props
-        this.children = children
-        this.parent = parent || undefined
-        this.key = null
+        this.children = []
+        this.parent = undefined
         this.component = null
         this.el = el || undefined
+
+
+        if (!this.parent) {
+            this.key = "root"
+            this.sonIndex = 0
+        }
+        this.pushChildren(children)
     }
     // 渲染
     render() {
@@ -42,9 +49,15 @@ class VDomNode {
     }
     pushChildren(children) {
         if (children) {
-            children.forEach(child => {
+            children.forEach((child, index) => {
                 if (child instanceof VDomNode) {
                     child.parent = this
+                    child.sonIndex = index
+                    child.key = child.parent.key + String(child.sonIndex) + child.tag
+                } else if (child instanceof TextNode) {
+                    child.parent = this
+                    child.sonIndex = index
+                    child.key = child.parent.key + String(child.sonIndex) + "text"
                 }
                 this.children.push(child)
             })
@@ -55,9 +68,10 @@ class VDomNode {
 class TextNode {
     textValue: string
     parent: BenNodeType | undefined
-    constructor({ value, parent }: { value: string, parent?: BenNodeType }) {
+    sonIndex: number
+    key: string
+    constructor({ value }: { value: string }) {
         this.textValue = value
-        this.parent = parent
     }
     render() {
         const el = document.createTextNode(this.textValue)

@@ -7,14 +7,13 @@ function domToVDomNode(node, parent = undefined): BenNodeType {
     let children: Array<BenNodeType> = []
     let vdomNode
     if (checkTextNode(node)) {
-        vdomNode = new TextNode({ value: node.nodeValue, parent })
+        vdomNode = new TextNode({ value: node.nodeValue })
     } else {
         if (node.hasChildNodes) { children = [...node.childNodes].map(child => domToVDomNode(child, node)) }
         vdomNode = new VDomNode({
             tag: node.nodeName.toLowerCase(),
             props: node.attributes ? [...node.attributes].reduce((o, n) => { o[n.name] = n.value; return o }, {}) : {},
             children,
-            parent,
             el: node
         })
 
@@ -29,11 +28,11 @@ class benNodeTree {
 }
 const renderWorker = new Proxy({} as Record<string, Function>, {
     get(_, key: string) {
-        return function (info: string, props, children) {
+        return function (props, children) {
             if (key == "text") {
-                return new TextNode({ value: info })
+                return new TextNode({ value: props.value })
             }
-            return new VDomNode({ tag: key, props, children })
+            return new VDomNode({ tag: key, props: props, children })
         }
     }
 }
