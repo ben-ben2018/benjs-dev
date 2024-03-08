@@ -1,16 +1,8 @@
 import { isObject, toTypeString } from "../utils/basic"
+import { ReactiveFlags, Target } from "./reativeTargetType"
+import { reactiveMap } from "./reaticeMap"
 const __DEV__ = true
-type Target = {}
-const enum ReactiveFlags {
-    // 是否阻止成为代理属性
-    SKIP = '__v_skip',
-    // 是否是reactive属性
-    IS_REACTIVE = '__v_isReactive',
-    // 是否是readonly属性
-    IS_READONLY = '__v_isReadonly',
-    // mark target
-    RAW = '__v_raw'
-}
+
 // reactive origin类型常量
 const enum TargetType {
     // 无效的 比如基础数据类型
@@ -91,4 +83,23 @@ function createReactiveObject(
     proxyMap.set(target, proxy);
     return proxy;
 }
-export default createReactiveObject
+
+function ref(value: any) {
+    if (!isObject(value)) {
+        value = { value }
+    }
+    const baseHandlers = {
+        get: function (target, key) {
+            return target[key];
+        },
+        set: function (target, key, value, receiver) {
+            target[key] = value;
+            return true;
+        }
+    }
+    const collectionHandlers = {
+    }
+    return createReactiveObject(value, false, baseHandlers, collectionHandlers, reactiveMap)
+}
+
+export default ref
