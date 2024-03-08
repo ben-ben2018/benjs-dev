@@ -10,11 +10,8 @@ class VDomNode {
     sonIndex: number
     constructor({ tag, props, children, el }: Pick<VDomNode, "tag" | "props" | "children" | "parent" | "el">) {
         if (!tag) {
-            throw new Error('type is required')
+            throw new Error('tag is required')
         }
-
-        console.log(children)
-        // 虚拟节点
         this.tag = tag
         this.props = props
         this.children = []
@@ -29,11 +26,9 @@ class VDomNode {
         }
         this.pushChildren(children)
     }
-    // 渲染
+
     render() {
-        // 创建真实的dom节点
         const el = document.createElement(this.tag)
-        // 设置属性
         for (const key in this.props) {
             if (Object.hasOwnProperty.call(this.props, key)) {
                 const element = this.props[key]

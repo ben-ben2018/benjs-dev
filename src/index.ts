@@ -3,7 +3,7 @@ function checkTextNode(node): boolean {
     return node.nodeName === '#text'
 }
 function domToVDomNode(node, parent = undefined): BenNodeType {
-    // 创建虚拟dom节点
+
     let children: Array<BenNodeType> = []
     let vdomNode
     if (checkTextNode(node)) {
@@ -35,7 +35,5 @@ const renderWorker = new Proxy({} as Record<string, Function>, {
             return new VDomNode({ tag: key, props: props, children })
         }
     }
-}
-)
+})
 window.r = renderWorker
-window.benNodeTree = benNodeTree
