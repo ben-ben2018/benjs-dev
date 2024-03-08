@@ -37,3 +37,7 @@ const renderWorker = new Proxy({} as Record<string, Function>, {
     }
 })
 window.r = renderWorker
+
+class Ben{
+    constructor(options){}
+}
