@@ -65,7 +65,7 @@ function createReactiveObject(
     // 如果代理的数据不是obj则直接返回原对象
     if (!isObject(target)) {
         if (__DEV__) {
-            console.warn(`value cannot be made reactive: ${String(target)}`);
+            console.warn(`转换响应式失败${String(target)}`);
         }
         return target;
     }
@@ -91,3 +91,4 @@ function createReactiveObject(
     proxyMap.set(target, proxy);
     return proxy;
 }
+export default createReactiveObject
