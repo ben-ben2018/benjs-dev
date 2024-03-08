@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "rollup:build": "rollup -c"
+    "ben:build": "rollup -c"
   },
   "type": "module",
   "dependencies": {
