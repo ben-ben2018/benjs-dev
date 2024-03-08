@@ -1,4 +1,9 @@
-function defineComponent(componentTag?: string) {
+type componentsOptionType = {
+  componentTag: string
+}
+
+function defineComponent(options: componentsOptionType) {
+  const { componentTag } = options
   class Component extends HTMLElement {
     constructor() {
       super();
@@ -20,5 +25,25 @@ function defineComponent(componentTag?: string) {
   }
   customElements.define(componentTag.includes("-") ? componentTag : "ben-" + componentTag, Component);
 
-  return 1
+  return {
+    descriptor: {
+      filename: '',
+      source: '',
+      template: {
+        type: 'template',
+        content: '',
+        ast: null,
+      },
+      script: {
+        type: 'script',
+        content: '',
+        lang: 'js',
+      },
+      styles: null,
+      customBlocks: [],
+      cssVars: [],
+      slotted: false,
+    },
+    errors: []
+  }
 }
