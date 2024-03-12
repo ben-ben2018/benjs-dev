@@ -24,9 +24,17 @@ export function benLoader(options = {}) {
 
             try {
                 const ast = parseHtmlToAst(data)
-                return `export default function(_ctr){const template = \`${JSON.stringify(ast.children[0])}\`; return template}`
+                return `export function render(_ctr){
+                            const template = \`${JSON.stringify(ast.children[0])}\`; 
+                            return {
+                                template:{
+                                    content:\`${data}\`,
+                                    ast:template
+                                }
+                            }
+                        }`
             } catch (ex) {
-                console.warn(ex, '\n', `${id} template benLoader解析失败。（建议您检查：是否存在template是否为空的组件或页面）`)
+                console.warn(ex, '\n', `${id} template benLoader解析失败。（建议您检查：是否存在template是否为空的组件或页面。或者是有不标准的HTML结构）`)
                 return `export default \`${null}\``
             }
         }

@@ -1,7 +1,7 @@
 import { Ben } from "../../src"
-import test from "../pages/test.htm"
+import { render } from "../pages/test.htm"
 console.log(Ben)
-console.log(test({e:6}))
+console.log(render({ e: 6 }))
 
 const t = {
     template: {

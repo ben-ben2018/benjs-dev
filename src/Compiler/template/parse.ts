@@ -1,3 +1,4 @@
+import { VDomNode } from "../../benDom"
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/
 const ncname = `[a-zA-Z_][\\-\\.0-9_a-zA-Z]*`
 const qnameCapture = `((?:${ncname}\\:)?${ncname})`
@@ -120,7 +121,9 @@ function parseHtmlToAst(html: string) {
     function start(match) {
         let { tagName, attrs } = match
 
-        const element = createAstElement(tagName, attrs);
+        const element = new VDomNode({
+            tag: tagName, props: attrs, children: []
+        })
         match.type == -1 ? match.element = element : null
         if (!root) {
             root = element;
@@ -146,16 +149,6 @@ function parseHtmlToAst(html: string) {
                 type: 3,
                 text
             })
-        }
-    }
-
-    function createAstElement(tagName, attrs) {
-        return {
-            tag: tagName,
-            type: 1,
-            children: [],
-            attrs,
-            parent: null
         }
     }
 
