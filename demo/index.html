@@ -2,24 +2,22 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Benjs demo</title>
+    <meta name="description" content="A benjs demo" />
+    <meta name="keywords" content="Benjs" />
 </head>
 
 <body>
-    <div id="app">
-        <h1>666<img></h1>
-    </div>
-    <script src="./dist/umd/index.js"></script>
-    <script>
-        let s1 = r.div({ class: "666" }, [])
-        let s2 = r.div({ class: "666" }, [])
-        let s3 = r.div({ class: "666" }, [])
-
-        console.dir(r.div({ class: "666" }, [s1, s2, s3, r.text({ value: 555 })]))
-        // console.log(new benNodeTree(document.getElementById('app')))
-    </script>
+    <style>
+        body {
+            font-size: 100%;
+            font-family: Nunito, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji", " Segoe UI Emoji", Segoe UI Symbol, " Noto Color Emoji"
+        }
+    </style>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
 </body>
 
 </html>

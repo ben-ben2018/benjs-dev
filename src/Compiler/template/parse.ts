@@ -14,7 +14,7 @@ const annotation = /<!--[\s\S]*?-->/g
 const simpleTags = ['meta', 'img', 'input', 'hr', 'br']
 //注意树形的html 只能有一个根节点
 function parseHtmlToAst(html: string) {
-    let $handleList = []
+
     html = html.replace(annotation, "")
     let hasDoctype = html.match(doctype)
     if (hasDoctype) {
@@ -83,10 +83,6 @@ function parseHtmlToAst(html: string) {
                     })
                 }
 
-                if (attrObj.name[0] == "$") {
-                    match.type = -1;
-                    $handleList.push(match)
-                }
                 advance(attr[0].length);
             }
 
@@ -130,7 +126,6 @@ function parseHtmlToAst(html: string) {
         const element = stack.pop();
         currentParent = stack[stack.length - 1];
         if (currentParent) {
-            element.parent = currentParent;
             currentParent.children.push(element);
         }
     }
@@ -156,39 +151,6 @@ function parseHtmlToAst(html: string) {
         }
     }
 
-    $handleList.forEach((match) => {
-        let element = match.element
-        element.attrs.forEach((attr, index) => {
-            let v = attr.value
-            switch (attr.name) {
-                case "$for": $for(element, v); element.parent.children.splice(index - 1, 1); break;
-            }
-        })
-    })
-
-    function $for(element, v) {
-        let vs = v.trim().match(/(.*?)\sin\s(.*?)$/)
-        if (!vs) return
-        let keys = eval(vs[2])
-        Object.keys(keys).forEach((key) => {
-            let tempParent = element.parent, item = keys[key]
-            element.parent = undefined
-            let newNode = JSON.parse(JSON.stringify(element))
-            newNode.attrs.forEach((attrIndex, index) => {
-                let attr = newNode.attrs[index]
-                if (attr.name[0] == "&") {
-                    attr.name = attr.name.slice(1)
-                    attr.value = attr.value.replace(new RegExp(`{${vs[1]}}`, 'g'), item)
-                    attr.value = attr.value.replace(/{index}/g, index)
-                }
-                if (attr.name[0] == "$") {
-                    newNode.attrs[index] = undefined
-                }
-            })
-            tempParent.children.push(newNode)
-            element.parent = tempParent
-        })
-    }
 
     return root;
 }
