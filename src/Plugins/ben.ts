@@ -1,3 +1,4 @@
+// @ts-ignore
 import fs from 'node:fs'
 import parseHtmlToAst from '../Compiler/template/parse'
 
@@ -7,13 +8,13 @@ export function benLoader(options = {}) {
         name: 'ben-loader',
         enforce: 'pre',
 
-        async load(id) {
+        async load(id: string) {
             if (!id.match(mdRegex)) {
                 return
             }
             const [path, query] = id.split('?', 2)
 
-            let data
+            let data: string
             try {
                 data = fs.readFileSync(path, 'utf-8')
             } catch (ex) {
