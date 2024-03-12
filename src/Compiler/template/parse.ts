@@ -73,6 +73,7 @@ function parseHtmlToAst(html: string) {
             //配置属性
             while (!(end = html.match(startTagClose)) && (attr = html.match(attribute))) {
                 let attrObj = {
+                    type: 1,
                     name: attr[1],
                     value: attr[3] || attr[4] || attr[5]
                 }
@@ -80,6 +81,13 @@ function parseHtmlToAst(html: string) {
                 if (attrObj.name[0] == "#") {
                     match.attrs.push({
                         name: "ben" + attrObj.name.slice(1)
+                    })
+                } else if (attrObj.name[0] == "$") {
+                    match.attrs.push({
+                        type: 2,
+                        name: "bind",
+                        attrKay: attrObj.name.slice(1),
+                        value: "_ctr." + attrObj.value
                     })
                 }
 
