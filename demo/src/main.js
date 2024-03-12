@@ -1,19 +1,4 @@
 import { Ben } from "../../src"
-import { render } from "../pages/test.htm"
+import { render } from "../components/Header.htm"
 console.log(Ben)
 console.log(render({ e: 6 }))
-
-const t = {
-    template: {
-        content: ``,
-        ast: {}
-
-    },
-    script: {
-        content: ``,
-
-    },
-    style: {
-
-    }
-}

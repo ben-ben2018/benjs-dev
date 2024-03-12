@@ -39,7 +39,14 @@ const renderWorker = new Proxy({} as Record<string, Function>, {
 window.r = renderWorker
 
 class Ben {
-    constructor(options) { }
+    constructor(options) {
+        
+     }
+     mount(query){
+        const container = document.querySelector(query)
+        container.innerHTML = ""
+        container.setAttribute('data-b-app', '')
+     }
 }
 
 export { Ben }

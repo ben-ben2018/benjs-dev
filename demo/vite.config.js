@@ -2,24 +2,27 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import benLoader from '../src/Plugins/ben'
 
+
+console.log(resolve(__dirname, 'pages/test.html'))
+
 export default defineConfig({
-  base: './',
+  // base: './',
   server: {
-    host: "0.0.0.0",
+
     port: 5174,
   },
   build: {
-    // rollupOptions: {
-    //   input: {
-    //     main: resolve(__dirname, 'index.html'),
-    //     nested: resolve(__dirname, 'pages/test.htm'),
-    //   },
-    // },
-    lib: {
-      entry: resolve(__dirname, 'src/main.js'),
-      name: 'demo',
-      fileName: 'demo'
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, 'index.html'),
+        nested: resolve(__dirname, 'pages/test.html'),
+      },
     },
+    // lib: {
+    //   entry: resolve(__dirname, 'src/main.js'),
+    //   name: 'demo',
+    //   fileName: 'demo'
+    // },
   },
   plugins: [benLoader()],
   assetsInclude: ["**/*.htm"]
