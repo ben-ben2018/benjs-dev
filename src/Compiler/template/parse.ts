@@ -1,4 +1,4 @@
-import { VDomNode } from "../../benDom"
+import { VDomNode, TextNode } from "../../benDom"
 const attribute = /^\s*([^\s"'<>\/=]+)(?:\s*(=)\s*(?:"([^"]*)"+|'([^']*)'+|([^\s"'=<>`]+)))?/
 const ncname = `[a-zA-Z_][\\-\\.0-9_a-zA-Z]*`
 const qnameCapture = `((?:${ncname}\\:)?${ncname})`
@@ -14,14 +14,14 @@ const doctype = /^<!DOCTYPE [^>]+>/i
 const annotation = /<!--[\s\S]*?-->/g
 const simpleTags = ['meta', 'img', 'input', 'hr', 'br']
 //注意树形的html 只能有一个根节点
-function parseHtmlToAst(html: string) {
+function parseHtmlToAst(html: string): VDomNode{
 
     html = html.replace(annotation, "")
     let hasDoctype = html.match(doctype)
     if (hasDoctype) {
         advance(hasDoctype[0].length)
     }
-    let text, root, currentParent, stack = [];
+    let text, root, currentParent: VDomNode, stack = [];
     while (html) {
         let textEnd = html.indexOf("<");
         if (textEnd === 0) {
@@ -137,7 +137,7 @@ function parseHtmlToAst(html: string) {
         const element = stack.pop();
         currentParent = stack[stack.length - 1];
         if (currentParent) {
-            currentParent.children.push(element);
+            currentParent.pushChildren([element]);
         }
     }
 
@@ -145,14 +145,9 @@ function parseHtmlToAst(html: string) {
     function chars(text) {
         text = text.trim();
         if (text.length > 0) {
-            currentParent && currentParent.children.push({
-                type: 3,
-                text
-            })
+            currentParent && currentParent.pushChildren([new TextNode({ value: text })])
         }
     }
-
-
     return root;
 }
 export default parseHtmlToAst

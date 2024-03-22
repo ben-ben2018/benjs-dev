@@ -8,6 +8,7 @@ class VDomNode {
     component: boolean | null
     el?: HTMLElement
     sonIndex: number
+    parentKey?: string
     constructor({ tag, props, children, el }: Pick<VDomNode, "tag" | "props" | "children" | "parent" | "el">) {
         if (!tag) {
             throw new Error('tag is required')
@@ -18,8 +19,6 @@ class VDomNode {
         this.parent = undefined
         this.component = null
         this.el = el || undefined
-
-
         if (!this.parent) {
             this.key = "root"
             this.sonIndex = 0
@@ -46,13 +45,13 @@ class VDomNode {
         if (children) {
             children.forEach((child, index) => {
                 if (child instanceof VDomNode) {
-                    child.parent = this
+                    child.parentKey = this.key
                     child.sonIndex = index
-                    child.key = child.parent.key + String(child.sonIndex) + child.tag
+                    child.key = child.parentKey + String(child.sonIndex) + child.tag
                 } else if (child instanceof TextNode) {
-                    child.parent = this
+                    child.parentKey = this.key
                     child.sonIndex = index
-                    child.key = child.parent.key + String(child.sonIndex) + "text"
+                    child.key = child.parentKey + String(child.sonIndex) + "text"
                 }
                 this.children.push(child)
             })
@@ -65,6 +64,7 @@ class TextNode {
     parent: BenNodeType | undefined
     sonIndex: number
     key: string
+    parentKey?: string
     constructor({ value }: { value: string }) {
         this.textValue = value
     }

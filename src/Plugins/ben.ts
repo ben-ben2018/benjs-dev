@@ -24,13 +24,10 @@ export function benLoader(options = {}) {
 
             try {
                 const ast = parseHtmlToAst(data)
-                return `export function render(_ctr){
-                            const template = \`${JSON.stringify(ast.children[0])}\`; 
-                            return {
-                                template:{
-                                    content:\`${data}\`,
-                                    ast:template
-                                }
+                return `export default {
+                            template:{
+                                content:\`${data}\`,
+                                ast:${JSON.stringify(ast.children[0])}
                             }
                         }`
             } catch (ex) {

@@ -44,7 +44,8 @@ class Ben {
      }
      mount(query){
         const container = document.querySelector(query)
-        container.innerHTML = ""
+
+        // container.innerHTML = ""
         container.setAttribute('data-b-app', '')
      }
 }
