@@ -1,4 +1,6 @@
 import { Ben } from "../../src"
 import { render } from "../components/Header.htm"
-console.log(Ben)
+new Ben({
+    el: "#app",
+})
 console.log(render({ e: 6 }))

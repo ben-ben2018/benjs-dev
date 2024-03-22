@@ -40,7 +40,7 @@ window.r = renderWorker
 
 class Ben {
     constructor(options) {
-        
+        this.mount(options.el)
      }
      mount(query){
         const container = document.querySelector(query)
