@@ -1,6 +1,6 @@
 // @ts-ignore
 import fs from 'node:fs'
-import parseHtmlToAst from '../Compiler/template/parse'
+import parseHtmlToAst from '../compiler-core/template/parse'
 
 export function benLoader(options = {}) {
     const mdRegex = /\.htm$/
