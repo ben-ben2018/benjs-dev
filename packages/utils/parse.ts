@@ -1,0 +1,1 @@
+export const isOn = (key: string) => /^on[^a-z]/.test(key)
