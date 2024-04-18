@@ -1,0 +1,19 @@
+{
+    "name": "@ben/reactivity",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "module": "dist/reactivity.esm-bundler.js",
+    "unpkg": "dist/reactivity.global.js",
+    "buildOptions": {
+        "name": "benReactivity",
+        "formats": [
+            "cjs",
+            "esm-bundler",
+            "global"
+        ]
+    },
+    "scripts": {},
+    "keywords": [],
+    "author": ""
+}
